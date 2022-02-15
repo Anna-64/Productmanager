@@ -27,7 +27,7 @@ public class ProductRepository {
 //    return null;
 //    }
 
-    public void removeById(int id) { // удаляет по id
+    public Product[] removeById(int id) { // удаляет по id
         int length = items.length - 1;
         Product[] tmp = new Product[length];
         int index = 0;
@@ -38,5 +38,6 @@ public class ProductRepository {
             }
         }
         items = tmp;
+        return tmp;
     }
 }
