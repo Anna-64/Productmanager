@@ -11,123 +11,82 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductRepositoryTest {
     private ProductRepository repository = new ProductRepository();
     private ProductManager manager = new ProductManager(repository);
-    private Book coreJava = new Book(1, "core", 200, "first");
-    private Book master = new Book(2, "master", 3000, "first");
-    private Book fang = new Book(3, "fang", 5050, "three");
-    private Smartphone one = new Smartphone(1, "one", 5000, "phone");
+
+    private Product shorts = new Product(1, " shorts", 1001);
+    private Book harryPotter = new Book(10, "HarryPotter", 511, "Роулинг");
+    private Smartphone iphone = new Smartphone(30, "Iphone", 5000, "Apple");
 
     @Test
-    public void shouldSaveOneItem() {
-        repository.save(coreJava); //сохраняем книгу
+    void add3Product() {
+        repository.save(shorts);
+        repository.save(harryPotter);
+        repository.save(iphone);
 
-        Product[] expected = new Product[]{coreJava};
-        Product[] actual = repository.findAll();//запросим все продукты в репозитории, и вернется массив и внутри будет книга
-        assertArrayEquals(expected, actual);
-    }
-
-
-    @Test
-    void shouldSaveOneItem1() {
-
-        repository.save(master);
-
-        Product[] expected = new Product[]{master};
         Product[] actual = repository.findAll();
+        Product[] expected = {shorts, harryPotter, iphone};
 
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    void shouldSaveOneItem2() {
+    void addProduct() {
+        ProductRepository repo = new ProductRepository();
+        repo.save(shorts);
+        repo.save(harryPotter);
 
-        repository.save(one);
+        Product[] actual = repo.findAll();
+        Product[] expected = {shorts, harryPotter};
 
-        Product[] expected = new Product[]{one};
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    void add1Product() {
+        repository.save(iphone);
+
         Product[] actual = repository.findAll();
+        Product[] expected = {iphone};
 
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    void shouldSaveOneItem3() {
-
-        repository.save(fang);
-
-        Product[] expected = new Product[]{fang};
+    void findAll() {
         Product[] actual = repository.findAll();
+        Product[] expected = {};
 
         assertArrayEquals(expected, actual);
     }
 
 
     @Test
-    void shouldFindAllItems() {
+    void removeById() {
+        repository.save(shorts);
+        repository.save(harryPotter);
+        repository.save(iphone);
 
-        repository.save(coreJava);
-        repository.save(master);
-        repository.save(one);
-        repository.save(fang);
+        repository.removeById(10);
 
-        Product[] expected = new Product[]{coreJava, master, one, fang};
         Product[] actual = repository.findAll();
+        Product[] expected = {shorts, iphone};
 
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    void shouldSearchByString() {
+    void removeByIdAll() {
+        repository.save(shorts);
+        repository.save(harryPotter);
+        repository.save(iphone);
 
-        repository.save(coreJava);
-        repository.save(master);
-        repository.save(one);
-        repository.save(fang);
+        repository.removeById(10);
+        repository.removeById(30);
+        repository.removeById(1);
 
-        Product[] expected = new Product[]{coreJava};
-        Product[] actual = manager.searchBy("core");
-
-        assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    void shouldSearchByString2() {
-
-        repository.save(coreJava);
-        repository.save(master);
-        repository.save(one);
-        repository.save(fang);
-
-        Product[] expected = new Product[]{one};
-        Product[] actual = manager.searchBy("one");
+        Product[] actual = repository.findAll();
+        Product[] expected = {};
 
         assertArrayEquals(expected, actual);
     }
 
-    @Test
-    void shouldSearchByString3() {
-
-        repository.save(coreJava);
-        repository.save(master);
-        repository.save(one);
-        repository.save(fang);
-
-        Product[] expected = new Product[]{};
-        Product[] actual = manager.searchBy("two");
-
-        assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    void shouldSearchByString4() {
-
-        repository.save(coreJava);
-        repository.save(master);
-        repository.save(one);
-        repository.save(fang);
-
-        Product[] expected = new Product[]{fang};
-        Product[] actual = manager.searchBy("fang");
-
-        assertArrayEquals(expected, actual);
-    }
 }
-
