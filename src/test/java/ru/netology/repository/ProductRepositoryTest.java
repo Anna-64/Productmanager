@@ -1,7 +1,9 @@
 package ru.netology.repository;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.netology.domain.Book;
+import ru.netology.domain.NotFoundException;
 import ru.netology.domain.Product;
 import ru.netology.domain.Smartphone;
 import ru.netology.manager.ProductManager;
@@ -17,7 +19,7 @@ class ProductRepositoryTest {
     private Smartphone iphone = new Smartphone(30, "Iphone", 5000, "Apple");
 
     @Test
-    void add3Product() {
+    void addProduct() {
         repository.save(shorts);
         repository.save(harryPotter);
         repository.save(iphone);
@@ -29,7 +31,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void addProduct() {
+    void add1Product() {
         ProductRepository repo = new ProductRepository();
         repo.save(shorts);
         repo.save(harryPotter);
@@ -41,7 +43,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void add1Product() {
+    void add2Product() {
         repository.save(iphone);
 
         Product[] actual = repository.findAll();
@@ -66,27 +68,38 @@ class ProductRepositoryTest {
         repository.save(iphone);
 
         repository.removeById(10);
-
-        Product[] actual = repository.findAll();
-        Product[] expected = {shorts, iphone};
-
-        assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    void removeByIdAll() {
-        repository.save(shorts);
-        repository.save(harryPotter);
-        repository.save(iphone);
-
-        repository.removeById(10);
-        repository.removeById(30);
         repository.removeById(1);
+        repository.removeById(30);
 
         Product[] actual = repository.findAll();
         Product[] expected = {};
 
         assertArrayEquals(expected, actual);
     }
+
+    @Test
+    void removeByIdOneProduct() {
+        repository.save(shorts);
+        repository.save(harryPotter);
+        repository.save(iphone);
+
+        repository.removeById(30);
+
+        Product[] actual = repository.findAll();
+        Product[] expected = {shorts, harryPotter};
+
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    void removeByIdNotFound() {
+        repository.save(shorts);
+        repository.save(harryPotter);
+        repository.save(iphone);
+
+        Assertions.assertThrows(NotFoundException.class, () -> repository.removeById(55));
+    }
+
+
 
 }
